@@ -1,10 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 // reactstrap components
 import {
   Button,
   Card,
-  CardHeader,
   CardBody,
   FormGroup,
   Form,
@@ -17,9 +17,7 @@ import {
   Col,
 } from "reactstrap";
 
-// core components
-import DemoNavbar from "components/Navbars/DemoNavbar.js";
-import SimpleFooter from "components/Footers/SimpleFooter.js";
+import Logo from "../assets/img/brand/white.png";
 
 class Register extends React.Component {
   componentDidMount() {
@@ -30,10 +28,9 @@ class Register extends React.Component {
   render() {
     return (
       <>
-        <DemoNavbar />
         <main ref="main">
           <section className="section section-shaped section-lg">
-            <div className="shape shape-style-1 bg-gradient-default">
+            <div className="shape shape-style-1 bg-gradient-info">
               <span />
               <span />
               <span />
@@ -43,55 +40,17 @@ class Register extends React.Component {
               <span />
               <span />
             </div>
-            <Container className="pt-lg-7">
+            <Container className="mt--6">
+              <div className="">
+                <img src={Logo} alt="logo" width="200" />
+              </div>
               <Row className="justify-content-center">
                 <Col lg="5">
                   <Card className="bg-secondary shadow border-0">
-                    <CardHeader className="bg-white pb-5">
-                      <div className="text-muted text-center mb-3">
-                        <small>Sign up with</small>
-                      </div>
-                      <div className="text-center">
-                        <Button
-                          className="btn-neutral btn-icon mr-4"
-                          color="default"
-                          href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          <span className="btn-inner--icon mr-1">
-                            <img
-                              alt="..."
-                              src={
-                                require("assets/img/icons/common/github.svg")
-                                  .default
-                              }
-                            />
-                          </span>
-                          <span className="btn-inner--text">Github</span>
-                        </Button>
-                        <Button
-                          className="btn-neutral btn-icon ml-1"
-                          color="default"
-                          href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          <span className="btn-inner--icon mr-1">
-                            <img
-                              alt="..."
-                              src={
-                                require("assets/img/icons/common/google.svg")
-                                  .default
-                              }
-                            />
-                          </span>
-                          <span className="btn-inner--text">Google</span>
-                        </Button>
-                      </div>
-                    </CardHeader>
-                    <CardBody className="px-lg-5 py-lg-5">
-                      <div className="text-center text-muted mb-4">
-                        <small>Or sign up with credentials</small>
-                      </div>
+                    <div className="text-muted text-center mt-5">
+                      <h4>Create New Account </h4>
+                    </div>
+                    <CardBody className="px-lg-4 py-lg-4">
                       <Form role="form">
                         <FormGroup>
                           <InputGroup className="input-group-alternative mb-3">
@@ -127,14 +86,6 @@ class Register extends React.Component {
                             />
                           </InputGroup>
                         </FormGroup>
-                        <div className="text-muted font-italic">
-                          <small>
-                            password strength:{" "}
-                            <span className="text-success font-weight-700">
-                              strong
-                            </span>
-                          </small>
-                        </div>
                         <Row className="my-4">
                           <Col xs="12">
                             <div className="custom-control custom-control-alternative custom-checkbox">
@@ -174,10 +125,31 @@ class Register extends React.Component {
                   </Card>
                 </Col>
               </Row>
+              <Row className="mt-3">
+                <Col className="text-center">
+                  <Link className="text-light" to="/login">
+                    <small>Sign In</small>
+                  </Link>
+                </Col>
+              </Row>
             </Container>
+            <div className="separator separator-bottom separator-skew zindex-100">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="none"
+                version="1.1"
+                viewBox="0 0 2560 100"
+                x="0"
+                y="0"
+              >
+                <polygon
+                  className="fill-white"
+                  points="2560 0 2560 100 0 100"
+                />
+              </svg>
+            </div>
           </section>
         </main>
-        <SimpleFooter />
       </>
     );
   }
