@@ -1,82 +1,138 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 // reactstrap components
-import { Container, Row } from "reactstrap";
+// reactstrap components
+import { Button, Container, Row, Col } from "reactstrap";
 
-// core components
-import DemoNavbar from "components/Navbars/DemoNavbar.js";
-import CardsFooter from "components/Footers/CardsFooter.js";
-
-// index page sections
-import Hero from "./IndexSections/Hero.js";
-import Buttons from "./IndexSections/Buttons.js";
-import Inputs from "./IndexSections/Inputs.js";
-import CustomControls from "./IndexSections/CustomControls.js";
-import Menus from "./IndexSections/Menus.js";
-import Navbars from "./IndexSections/Navbars.js";
-import Tabs from "./IndexSections/Tabs.js";
-import Progress from "./IndexSections/Progress.js";
-import Pagination from "./IndexSections/Pagination.js";
-import Pills from "./IndexSections/Pills.js";
-import Labels from "./IndexSections/Labels.js";
-import Alerts from "./IndexSections/Alerts.js";
-import Typography from "./IndexSections/Typography.js";
-import Modals from "./IndexSections/Modals.js";
-import Datepicker from "./IndexSections/Datepicker.js";
-import TooltipPopover from "./IndexSections/TooltipPopover.js";
-import Carousel from "./IndexSections/Carousel.js";
-import Icons from "./IndexSections/Icons.js";
-import Login from "./IndexSections/Login.js";
-import Download from "./IndexSections/Download.js";
-
-class Index extends React.Component {
-  componentDidMount() {
+function Index() {
+  useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
-    this.refs.main.scrollTop = 0;
-  }
-  render() {
-    return (
-      <>
-        <DemoNavbar />
-        <main ref="main">
-          <Hero />
-          <Buttons />
-          <Inputs />
-          <section className="section">
-            <Container>
-              <CustomControls />
-              <Menus />
+  }, []);
+
+  return (
+    <>
+      <main>
+        <div className="position-relative">
+          {/* Hero for FREE version */}
+          <section className="section section-hero section-shaped">
+            {/* Background circles */}
+            <div className="shape shape-style-1 shape-default">
+              <span className="span-150" />
+              <span className="span-50" />
+              <span className="span-50" />
+              <span className="span-75" />
+              <span className="span-100" />
+              <span className="span-75" />
+              <span className="span-50" />
+              <span className="span-100" />
+              <span className="span-50" />
+              <span className="span-100" />
+            </div>
+            <Container className="shape-container d-flex align-items-center ">
+              <div className="col px-0">
+                <Row className="align-items-center justify-content-center">
+                  <Col className="text-center" lg="6">
+                    <img
+                      alt="..."
+                      className="img-fluid"
+                      src={require("assets/img/brand/white.png")}
+                      style={{ width: "200px" }}
+                    />
+                    <p className="lead text-white">
+                      Think positive & live positive <br />
+                      life with happyness
+                    </p>
+                  </Col>
+                </Row>
+              </div>
+              <div className="">
+                <div className="row justify-content-center">
+                  <Button
+                    className="btn-icon mb-3 mb-sm-0"
+                    color="github"
+                    href="/session"
+                    size="lg"
+                    style={{ width: 300 }}
+                  >
+                    <span className="btn-inner--icon mr-1">
+                      <i className="bx bx-notepad"></i>
+                    </span>
+                    <span className="btn-inner--text">
+                      <span className="text-warning mr-1">On Time</span>
+                      SESSION
+                    </span>
+                  </Button>
+                </div>
+                <div className="row justify-content-center mt-3">
+                  <Button
+                    className="btn-icon mb-3 mb-sm-0"
+                    color="github"
+                    href="/facebook-analysis"
+                    size="lg"
+                    style={{ width: 300 }}
+                  >
+                    <span className="btn-inner--icon mr-1">
+                      <i className="bx bxl-facebook"></i>
+                    </span>
+                    <span className="btn-inner--text">
+                      <span className="text-warning mr-1">face book</span>
+                      analysis
+                    </span>
+                  </Button>
+                </div>
+                <div className="row justify-content-center mt-3">
+                  <Button
+                    className="btn-white btn-icon mb-3 mb-sm-0"
+                    color="default"
+                    href="/history"
+                    size="lg"
+                    style={{ width: 300 }}
+                  >
+                    <span className="btn-inner--icon mr-1">
+                      <i className="bx bx-history"></i>
+                    </span>
+                    <span className="btn-inner--text">History</span>
+                  </Button>
+                </div>
+                <div className="row justify-content-center mt-3">
+                  <Button
+                    className="btn-white btn-icon mb-3 mb-sm-0"
+                    color="default"
+                    href="/profile"
+                    size="lg"
+                    style={{ width: 300 }}
+                  >
+                    <span className="btn-inner--icon mr-1">
+                      <i className="bx bx-user"></i>
+                    </span>
+                    <span className="btn-inner--text">User Profile</span>
+                  </Button>
+                </div>
+              </div>
             </Container>
+            {/* SVG separator */}
+
+            <div className="separator separator-bottom separator-skew zindex-100">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="none"
+                version="1.1"
+                viewBox="0 0 2560 100"
+                x="0"
+                y="0"
+              >
+                <polygon
+                  className="fill-white"
+                  points="2560 0 2560 100 0 100"
+                />
+              </svg>
+            </div>
           </section>
-          <Navbars />
-          <section className="section section-components">
-            <Container>
-              <Tabs />
-              <Row className="row-grid justify-content-between align-items-center mt-lg">
-                <Progress />
-                <Pagination />
-              </Row>
-              <Row className="row-grid justify-content-between">
-                <Pills />
-                <Labels />
-              </Row>
-              <Alerts />
-              <Typography />
-              <Modals />
-              <Datepicker />
-              <TooltipPopover />
-            </Container>
-          </section>
-          <Carousel />
-          <Icons />
-          <Login />
-          <Download />
-        </main>
-        <CardsFooter />
-      </>
-    );
-  }
+        </div>
+      </main>
+    </>
+  );
 }
 
 export default Index;
