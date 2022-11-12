@@ -3,11 +3,17 @@ import React, { useEffect } from "react";
 // reactstrap components
 // reactstrap components
 import { Button, Container, Row, Col } from "reactstrap";
-
+import { useNavigate } from "react-router-dom";
 function Index() {
+  const navigate = useNavigate();
+  const user = localStorage.getItem("user");
+  // const userParsed = JSON.parse(user);
   useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
+    if (!user) {
+      navigate("/login");
+    }
   }, []);
 
   return (

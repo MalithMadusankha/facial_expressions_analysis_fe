@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ReactMediaRecorder } from "react-media-recorder";
 import fixWebmDuration from "webm-duration-fix";
+import { useNavigate } from "react-router-dom";
 // reactstrap components
 import {
   Table,
@@ -33,6 +34,8 @@ function OnTimeSession() {
     // "Do you feel disappointed in your life?",
     // "Are you blaming yourself about yourself?",
   ];
+
+  const naviagate = useNavigate();
 
   const user = localStorage.getItem("user");
   const userParsed = JSON.parse(user);
@@ -90,6 +93,10 @@ function OnTimeSession() {
   useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
+
+    if (!user) {
+      naviagate("/login");
+    }
   }, []);
 
   return (

@@ -121,7 +121,10 @@ class Index extends React.Component {
                   <NavItem>
                     <NavLink
                       className="nav-link-icon text-warning"
-                      href="/login"
+                      onClick={() => {
+                        localStorage.clear();
+                        window.location.reload();
+                      }}
                       id="tooltip112445449"
                     >
                       <i className="bx bx-log-out-circle bx-rotate-90"></i>

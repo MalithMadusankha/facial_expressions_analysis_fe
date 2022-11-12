@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import FacebookLogin from "react-facebook-login";
+import { useNavigate } from "react-router-dom";
+
 // reactstrap components
 import {
   Input,
@@ -20,6 +22,7 @@ import Navbar from "components/Navbars/Index";
 import SimpleFooter from "components/Footers/SimpleFooter";
 import { Link } from "react-router-dom";
 import OnTimeSessionResult from "./OnTimeSessionResult";
+import Loading from "components/UI/Loading";
 
 const axios = require("axios").default;
 
@@ -30,13 +33,18 @@ function FaceBookAnalysis() {
   const [showFinalRes, setShowFinalRes] = useState(false);
   const user = localStorage.getItem("user");
   const userParsed = JSON.parse(user);
+  const navigate = useNavigate();
+  const [errorMsg, setErrorMsg] = useState("");
+  const [overalRes, setOveralRes] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const componentClicked = (response) => {};
+
   const responseFacebook = (response) => {
     let posts = [];
     let positive = 0;
     let totalResp = 0;
-
+    setLoading(true);
     axios
       .get(
         "https://graph.facebook.com/v15.0/" +
@@ -70,28 +78,43 @@ function FaceBookAnalysis() {
             if (response.data === "positive") {
               positive++;
             }
-            axios
-              .post("http://localhost:3003/api/fbPosts/saveFacebookPost", {
-                userId: userParsed._id,
-                post: element.message,
-                result: response.data,
-              })
-              .then((response) => {
-                // console.log(response);
-              });
           }
         }
         setPosters(posts);
-        setAverage(positive / totalResp);
+        setLoading(false);
+        let avg = positive / totalResp;
+        setAverage(avg);
+        if (avg > 0.5) {
+          setOveralRes("Normal");
+        } else {
+          setOveralRes("Moderate");
+        }
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
+  const saveOveralResult = (e) => {
+    axios
+      .post("http://localhost:8070/history/add", {
+        result: overalRes,
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        setErrorMsg(err);
+      });
+  };
+
   useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
+    if (!user) {
+      navigate("/login");
+    }
   }, []);
 
   return (
@@ -166,110 +189,119 @@ function FaceBookAnalysis() {
                   <Row className="row-grid">
                     <Col>
                       <Card className="card-lift--hover shadow border-0">
-                        <CardBody className="py-5">
-                          <Form className="">
-                            <FormGroup>
-                              <Label>Face Book ID</Label>
-                              <div className="d-flex justify-content-between">
-                                {" "}
-                                <Input
-                                  id="exampleEmail"
-                                  name="fb"
-                                  placeholder="enter your face book ID"
-                                  type="text"
-                                  className="w-75"
-                                  value={fbID}
-                                  onChange={(e) => setFbID(e.target.value)}
-                                />
-                                <FacebookLogin
-                                  appId={fbID}
-                                  autoLoad={true}
-                                  fields="name,email,picture"
-                                  onClick={componentClicked}
-                                  callback={responseFacebook}
-                                  cssClass="btn btn-primary"
-                                  icon="fa-facebook pr-2"
-                                />
-                              </div>
-                            </FormGroup>{" "}
-                          </Form>
-                          {posters && posters.length > 0 ? (
-                            <div>
-                              <div className="mt-5 d-flex justify-content-between">
-                                <div className=" d-flex flex-row">
-                                  <div className="d-flex flex-row">
-                                    <div
-                                      className="bg-success mr-3"
-                                      style={{ width: 20, borderRadius: 4 }}
-                                    />
-                                    <Badge color="success">
-                                      Positive visons
-                                    </Badge>
+                        {loading ? (
+                          <div className="justify-content-center my-5">
+                            <Loading />
+                          </div>
+                        ) : (
+                          <CardBody className="py-5">
+                            <Form className="">
+                              <FormGroup>
+                                <Label>Face Book ID</Label>
+                                <div className="d-flex justify-content-between">
+                                  {" "}
+                                  <Input
+                                    id="exampleEmail"
+                                    name="fb"
+                                    placeholder="enter your face book ID"
+                                    type="text"
+                                    className="w-75"
+                                    value={fbID}
+                                    onChange={(e) => setFbID(e.target.value)}
+                                  />
+                                  <FacebookLogin
+                                    appId={fbID}
+                                    autoLoad={true}
+                                    fields="name,email,picture"
+                                    onClick={componentClicked}
+                                    callback={responseFacebook}
+                                    cssClass="btn btn-primary"
+                                    icon="fa-facebook pr-2"
+                                  />
+                                </div>
+                              </FormGroup>{" "}
+                            </Form>
+                            {posters && posters.length > 0 ? (
+                              <div>
+                                <div className="mt-5 d-flex justify-content-between">
+                                  <div className=" d-flex flex-row">
+                                    <div className="d-flex flex-row">
+                                      <div
+                                        className="bg-success mr-3"
+                                        style={{ width: 20, borderRadius: 4 }}
+                                      />
+                                      <Badge color="success">
+                                        Positive visons
+                                      </Badge>
+                                    </div>
+                                    <div className="d-flex flex-row ml-5">
+                                      <div
+                                        className="bg-danger mr-3"
+                                        style={{ width: 20, borderRadius: 4 }}
+                                      />
+                                      <Badge color="danger">
+                                        worthlessness, hoplessness or guilt
+                                        visons
+                                      </Badge>
+                                    </div>
                                   </div>
-                                  <div className="d-flex flex-row ml-5">
-                                    <div
-                                      className="bg-danger mr-3"
-                                      style={{ width: 20, borderRadius: 4 }}
-                                    />
-                                    <Badge color="danger">
-                                      worthlessness, hoplessness or guilt visons
-                                    </Badge>
+                                  <div
+                                    className=""
+                                    onClick={() => {
+                                      if (posters && posters.length > 0) {
+                                        setShowFinalRes(true);
+                                        saveOveralResult();
+                                      }
+                                    }}
+                                  >
+                                    <Link className="">
+                                      Show Final Resulet{" "}
+                                      <i className="bx bx-chevrons-right bx-fade-left ml-2"></i>
+                                    </Link>
                                   </div>
                                 </div>
-                                <div
-                                  className=""
-                                  onClick={() => {
-                                    if (posters && posters.length > 0) {
-                                      setShowFinalRes(true);
-                                    }
-                                  }}
-                                >
-                                  <Link className="">
-                                    Show Final Resulet{" "}
-                                    <i className="bx bx-chevrons-right bx-fade-left ml-2"></i>
-                                  </Link>
-                                </div>
-                              </div>
 
-                              <div className="mt-5">
-                                <div>
-                                  <Table size="sm">
-                                    <thead>
-                                      <tr>
-                                        <th>#</th>
-                                        <th>Captions</th>
-                                        <th>Results</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      {posters.map((element, index) => (
-                                        <tr key={index}>
-                                          <th scope="row">{index + 1}</th>
-                                          <td>{element.post}</td>
-                                          <td>
-                                            {element.result === "positive" ? (
-                                              <Badge color="success">
-                                                POSITIVE
-                                              </Badge>
-                                            ) : (
-                                              <Badge color="danger">
-                                                NEGITIVE
-                                              </Badge>
-                                            )}
-                                          </td>
+                                <div className="mt-5">
+                                  <div>
+                                    <Table size="sm">
+                                      <thead>
+                                        <tr>
+                                          <th>#</th>
+                                          <th>Captions</th>
+                                          <th>Results</th>
                                         </tr>
-                                      ))}
-                                    </tbody>
-                                  </Table>
+                                      </thead>
+                                      <tbody>
+                                        {posters.map((element, index) => (
+                                          <tr key={index}>
+                                            <th scope="row">{index + 1}</th>
+                                            <td>{element.post}</td>
+                                            <td>
+                                              {element.result === "positive" ? (
+                                                <Badge color="success">
+                                                  POSITIVE
+                                                </Badge>
+                                              ) : (
+                                                <Badge color="danger">
+                                                  NEGITIVE
+                                                </Badge>
+                                              )}
+                                            </td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </Table>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          ) : (
-                            <div className="text-center mt-5">
-                              Please click the button to get Face Book Analysis
-                            </div>
-                          )}
-                        </CardBody>
+                            ) : (
+                              <div className="text-center mt-5">
+                                Please click the button to get Face Book
+                                Analysis
+                              </div>
+                            )}
+                          </CardBody>
+                        )}
                       </Card>
                     </Col>
                   </Row>
