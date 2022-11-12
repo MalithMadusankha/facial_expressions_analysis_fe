@@ -116,7 +116,7 @@ const VideoRoc = () => {
             </button>
             {isPlay && (
               <span>
-                <i class="bx bxs-music bx-burst fs-4 ms-2 text-primary"></i>
+                <i className="bx bxs-music bx-burst fs-4 ms-2 text-primary"></i>
               </span>
             )}
           </div>

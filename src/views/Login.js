@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // reactstrap components
 import {
@@ -19,8 +19,46 @@ import {
 
 import Logo from "../assets/img/brand/white.png";
 
+const axios = require("axios").default;
+
 function Login() {
   const [welcome, setWelcome] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const navigate = useNavigate();
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    if (email === "" || password === "") {
+      setErrorMsg("* please fill all fields");
+    } else {
+      axios
+        .post("http://localhost:3003/api/users/login", {
+          email: email,
+          password: password,
+        })
+        .then((response) => {
+          const status = response.data.Status;
+          const message = response.data.Message;
+          if (status === "Successful") {
+            const data = response.data.User;
+            console.log(data);
+            localStorage.setItem("user", JSON.stringify(data));
+            navigate("/landing");
+          } else {
+            setErrorMsg(message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          setErrorMsg(err);
+        });
+    }
+  };
+
   useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
@@ -66,7 +104,10 @@ function Login() {
                         <h4>Sign In </h4>
                       </div>
                       <CardBody className="px-lg-4 py-lg-4">
-                        <Form role="form">
+                        <small className="text-center text-danger">
+                          {errorMsg}
+                        </small>
+                        <Form onSubmit={onSubmit} role="form">
                           <FormGroup className="mb-3">
                             <InputGroup className="input-group-alternative">
                               <InputGroupAddon addonType="prepend">
@@ -74,7 +115,12 @@ function Login() {
                                   <i className="ni ni-email-83" />
                                 </InputGroupText>
                               </InputGroupAddon>
-                              <Input placeholder="Email" type="email" />
+                              <Input
+                                placeholder="Email"
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                              />
                             </InputGroup>
                           </FormGroup>
                           <FormGroup>
@@ -88,6 +134,8 @@ function Login() {
                                 placeholder="Password"
                                 type="password"
                                 autoComplete="off"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                               />
                             </InputGroup>
                           </FormGroup>
@@ -102,8 +150,7 @@ function Login() {
                             <Button
                               className="my-4"
                               color="primary"
-                              type="button"
-                              href="/landing"
+                              type="submit"
                             >
                               Sign in
                             </Button>

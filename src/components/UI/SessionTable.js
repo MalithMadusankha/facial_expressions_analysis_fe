@@ -1,7 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Table, Badge } from "reactstrap";
+import { default as axios } from "axios";
 
 function SessionTable() {
+  const [sessionHistory, setSessionHistory] = useState([]);
+
+  const user = localStorage.getItem("user");
+  const userParsed = JSON.parse(user);
+
+  const getSessionHistory = () => {
+    axios
+      .post(
+        "http://localhost:3003/api/sessionAnswers/getSessionResultsOfUser",
+        { userId: userParsed._id }
+      )
+      .then((response2) => {
+        const res2 = response2.data.SessionsResults;
+
+        let sessionResults = [];
+        for (let i = 0; i < res2.length; i++) {
+          sessionResults.push(res2[i]);
+        }
+        setSessionHistory(sessionResults);
+      });
+  };
+
+  useEffect(() => {
+    getSessionHistory();
+  }, []);
+
   return (
     <div>
       <Table size="sm">
@@ -14,30 +41,24 @@ function SessionTable() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Session - 01</td>
-            <td>
-              <Badge color="warning">MEDIUM</Badge>
-            </td>
-            <td>22-10-2022</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Session - 02</td>
-            <td>
-              <Badge color="info">LOW</Badge>
-            </td>
-            <td>20-10-2022</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>Session - 03</td>
-            <td>
-              <Badge color="danger">HIGH</Badge>
-            </td>
-            <td>25-10-2022</td>
-          </tr>
+          {sessionHistory.map((element, index) => (
+            <tr key={index}>
+              <th scope="row">{index + 1}</th>
+              <td>SES00{index + 1}</td>
+              <td>
+                {element.videos[0]?.videoResult === "Negative" ? (
+                  <Badge color="success">LOW</Badge>
+                ) : element.videos[0]?.videoResult === "Positive" ? (
+                  <Badge color="warning">MEDIUM</Badge>
+                ) : (
+                  <Badge color="danger">HIGH</Badge>
+                )}
+              </td>
+              <td>
+                {element.date ? element.date.toString().slice(0, 10) : "-"}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
     </div>

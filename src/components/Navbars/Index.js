@@ -124,7 +124,7 @@ class Index extends React.Component {
                       href="/login"
                       id="tooltip112445449"
                     >
-                      <i class="bx bx-log-out-circle bx-rotate-90"></i>
+                      <i className="bx bx-log-out-circle bx-rotate-90"></i>
                     </NavLink>
                   </NavItem>
                 </Nav>
