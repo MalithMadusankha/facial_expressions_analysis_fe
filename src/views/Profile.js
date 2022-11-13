@@ -1,4 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+// import { default as axios } from "axios";
 
 // reactstrap components
 import { Card, Container, Row, Col } from "reactstrap";
@@ -8,9 +10,16 @@ import Navbar from "components/Navbars/Index";
 import SimpleFooter from "components/Footers/SimpleFooter.js";
 
 function Profile() {
+  const navigate = useNavigate();
+
+  const user = localStorage.getItem("user");
+
   useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
+    if (!user) {
+      navigate("/login");
+    }
   }, []);
 
   return (
@@ -69,12 +78,12 @@ function Profile() {
                 </Row>
                 <div className="text-center my-5">
                   <h3>
-                    Jessica Jones{" "}
-                    <span className="font-weight-light">, 27</span>
+                    Ishani Perera
+                    <span className="font-weight-light">, 23</span>
                   </h3>
                   <div className="h6 font-weight-300">
                     <i className="ni location_pin mr-2" />
-                    Kandy Road, Kadawatha
+                    Kandy Road, Kuruneagala
                   </div>
                   <div className="h6 mt-5">
                     <i className="ni business_briefcase-24 mr-2" />

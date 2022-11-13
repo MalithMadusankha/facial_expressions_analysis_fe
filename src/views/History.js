@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 // nodejs library that concatenates classes
 import classnames from "classnames";
 
+import { useNavigate } from "react-router-dom";
+
 // reactstrap components
 import {
   Nav,
@@ -27,7 +29,9 @@ import DontWorryImg from "../assets/img/theme/dont_worry-removebg.png";
 
 function History() {
   const [activeTab, setActiveTab] = useState("1");
+  const user = localStorage.getItem("user");
 
+  const navigate = useNavigate();
   const toggle = (tab) => {
     if (activeTab !== tab) {
       setActiveTab(tab);
@@ -37,6 +41,9 @@ function History() {
   useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
+    if (!user) {
+      navigate("/login");
+    }
   }, []);
 
   return (
