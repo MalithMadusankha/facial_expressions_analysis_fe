@@ -3,17 +3,13 @@ import React, { useEffect, useState } from "react";
 // reactstrap components
 import { Card, CardBody, Container, Row, Col, Badge } from "reactstrap";
 
-// core components
-import Navbar from "components/Navbars/Index";
-import SimpleFooter from "components/Footers/SimpleFooter";
-
 import GiphyHi from "../assets/img/theme/giphy-hi-left.gif";
 import Greeting from "../assets/img/theme/greeting-removebg.png";
 
 function OnTimeSessionResult({ average }) {
   const [nomOrModerate, setNomOrModerate] = useState(false);
   useEffect(() => {
-    if (average > 0.5) {
+    if (average >= 0.5) {
       setNomOrModerate(true);
     } else {
       setNomOrModerate(false);

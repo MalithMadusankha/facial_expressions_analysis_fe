@@ -84,7 +84,7 @@ function FaceBookAnalysis() {
         setLoading(false);
         let avg = positive / totalResp;
         setAverage(avg);
-        if (avg > 0.5) {
+        if (avg >= 0.5) {
           setOveralRes("Normal");
         } else {
           setOveralRes("Moderate");
